@@ -29,6 +29,7 @@
 
 
 **DAY 04**
+
 7) **User Navbar Features**
      There will be three different features on the user navbar. First screen will be to **Manage User Profile**, this screen will contain the user data by default and there will be the option to edit that data, there will also be an option to update **contact information**. There will be another screen to display **all the orders by a user**. And third screen will be to **track the order**, user can add order_id to track a specific order.
 
