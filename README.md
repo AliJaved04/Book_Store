@@ -1,5 +1,10 @@
 # Book_Store
 
+**PROJECT STATUS ON TUESDAY 26-09-2023**
+   I have completed my **login page**, **signup page**, **user dashboard** (It consists of **Edit User Detail Page**, **My Orders Page**, **Track Order through OrderID**,**Review and Rate a Product** ) , **book catalog**, **single book page**, **cart_page**. I have done completed basic functionalities of these pages but the UI needs refinement and the API is linkage is not currently.
+
+
+
 **PROJECT TIMELINE**
    The deadline for the project development from my side is **Thursday/28-09-2023** with a buffer of one day.
 
