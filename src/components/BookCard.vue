@@ -5,7 +5,7 @@
         <v-col :cols="12">
           <v-card class="zoom">
             <v-img
-              :src="book.src"
+              :src="book.cover_image_url"
               class="align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
               height="200px"
@@ -39,6 +39,13 @@
                   size="small"
                   color="surface-variant"
                   variant="text"
+                  @click="wishlist(book.id)"
+                  >Wishlist</v-btn
+                >
+                <v-btn
+                  size="small"
+                  color="surface-variant"
+                  variant="text"
                   @click="detailPage(book.id)"
                   >Details</v-btn
                 >
@@ -51,6 +58,7 @@
   </v-card>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
   data: () => ({
     rating: 4,
@@ -60,11 +68,18 @@ export default {
     book: Object,
   },
   methods: {
+    ...mapActions("book", ["addToWishList"]),
     detailPage(id) {
       this.$router.push({
         name: "SingleProduct",
         params: { product_id: id },
       });
+    },
+    async wishlist(id) {
+      const res = await this.addToWishList(id);
+      if (res.message === "Item added to wishlist") {
+        console.log("Item Added");
+      }
     },
   },
 };

@@ -3,13 +3,12 @@
     <v-row>
       <v-col>
         <v-card>
-          <v-img src="book1.jpg" height="400"></v-img>
+          <v-img :src="book.cover_image_url" height="400"></v-img>
           <v-card-title>{{ book.title }}</v-card-title>
           <v-card-subtitle>{{ book.description }}</v-card-subtitle>
           <v-card-text>{{ book.author }}</v-card-text>
         </v-card>
 
-        <!-- Customer Reviews and Ratings -->
         <v-card>
           <v-card-title>Customer Reviews</v-card-title>
           <v-divider></v-divider>
@@ -55,18 +54,9 @@
 
 <script>
 export default {
-  beforeMount() {
-    // const BookID = this.$route.params.id;
-    // const BookTITLE = this.$route.params.title;
-    // const BookDESCRIPTION = this.$route.params.description;
-    // const BookAUTHOR = this.$route.params.author;
-  },
+  beforeMount() {},
   data() {
     return {
-      //   bookId: this.bookID,
-      //   bookTitle: this.BookTITLE,
-      //   BookDescription: this.BookDESCRIPTION,
-      //   BookAuthor: this.BookAUTHOR,
       book: {
         title: "Book Title",
         author: "Author Name",

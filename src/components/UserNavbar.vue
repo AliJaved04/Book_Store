@@ -27,7 +27,7 @@
 export default {
   methods: {
     manageProfile() {
-      this.$router.push("/userdashboard/userprofile");
+      this.$router.push("/HomeComponent/userdashboard/userprofile");
     },
     trackOrder() {
       this.$router.push("/userdashboard/trackorder");

@@ -1,12 +1,17 @@
 import ApiServices from "@/services/Api";
 const state = {
-    bookList: [
+    bookList: [],
 
-    ],
+    dummyList: [],
 
-    dummyList: []
 };
 
+const getters = {
+    getBookList: state => state.bookList,
+    getDummyData: state => state.dummyList,
+
+
+};
 const mutations = {
     setBookList(state, bookList) {
         state.bookList = bookList;
@@ -18,106 +23,27 @@ const mutations = {
 };
 
 const actions = {
-    fetchBooks({ commit }) {
-        const books = [
-            {
-                id: 1,
-                title: "Book Title 01",
-                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-                descriptiom: "This is all the description we need about this single product",
-                price: 500,
-                rating: 4.5,
-            },
-            {
-                id: 2,
-                title: "Book Title 02",
-                descriptiom: "This is all the description we need about this single product",
-                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-                price: 500,
-                rating: 1,
-
-            },
-
-            {
-                id: 3,
-                title: "Book Title 03",
-                descriptiom: "This is all the description we need about this single product",
-                price: 500,
-                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-                rating: 2,
-
-            },
-            {
-                id: 4,
-                descriptiom: "This is all the description we need about this single product",
-
-                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-
-                title: "Book Title 04",
-                price: 500,
-                rating: 3,
-
-            },
-            {
-                id: 5,
-                descriptiom: "This is all the description we need about this single product",
-
-                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-
-                title: "Book Title 05",
-                price: 500,
-                rating: 4.0,
-
-            },
-            {
-                id: 6,
-                descriptiom: "This is all the description we need about this single product",
-
-                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-
-                title: "Book Title 06",
-                price: 500,
-                rating: 4.1,
-
-            },
-            {
-                id: 7,
-                descriptiom: "This is all the description we need about this single product",
-
-                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-
-                title: "Book Title 07",
-                price: 500,
-                rating: 4.0,
-
-            },
-
-            {
-                id: 8,
-                descriptiom: "This is all the description we need about this single product",
-
-                title: "Book Title 08",
-                src: "https://picsum.photos/500/300?image=232",
-                price: 500,
-                rating: 3.5,
-
-            },
-        ];
+    async fetchBooks({ commit }) {
+        const books = await ApiServices.showAllBooks()
         commit('setBookList', books);
     },
     fetchPopularBooks({ commit }) {
         const books = [
             {
                 id: 1,
+                author: "Author01",
                 title: "Book Title 01",
-                src: "book5.jpg",
+                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
+                description: "This is all the description we need about this single product",
                 price: 500,
                 rating: 4.5,
             },
             {
                 id: 2,
+                author: "Author02",
                 title: "Book Title 02",
-                src: "book1.jpg",
+                description: "This is all the description we need about this single product",
+                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
                 price: 500,
                 rating: 1,
 
@@ -125,40 +51,52 @@ const actions = {
 
             {
                 id: 3,
+                author: "Author03",
                 title: "Book Title 03",
-                src: "book2.jpg",
+                description: "This is all the description we need about this single product",
                 price: 500,
+                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
                 rating: 2,
 
             },
             {
                 id: 4,
+                description: "This is all the description we need about this single product",
+                author: "Author04",
+                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
                 title: "Book Title 04",
-                src: "book5.jpg",
                 price: 500,
                 rating: 3,
 
             },
             {
                 id: 5,
+                description: "This is all the description we need about this single product",
+                author: "Author05",
+                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
                 title: "Book Title 05",
-                src: "book1.jpg",
                 price: 500,
                 rating: 4.0,
 
             },
             {
                 id: 6,
+                description: "This is all the description we need about this single product",
+                author: "Author06",
+                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
+
                 title: "Book Title 06",
-                src: "book5.jpg",
                 price: 500,
                 rating: 4.1,
 
             },
             {
                 id: 7,
+                description: "This is all the description we need about this single product",
+                author: "Author07",
+                src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
+
                 title: "Book Title 07",
-                src: "book1.jpg",
                 price: 500,
                 rating: 4.0,
 
@@ -166,8 +104,10 @@ const actions = {
 
             {
                 id: 8,
+                description: "This is all the description we need about this single product",
+                author: "Author08",
                 title: "Book Title 08",
-                src: "book2.jpg",
+                src: "https://picsum.photos/500/300?image=232",
                 price: 500,
                 rating: 3.5,
 
@@ -177,21 +117,24 @@ const actions = {
         commit('setBookList', popularBooks);
     },
 
-    async fetchDummy({ commit }) {
-        const data = await ApiServices.getAllProducts();
-        commit('setDummyData', data.products);
+    async addToWishList({ commit }, id) {
 
-    }
+        const res = await ApiServices.addToWishlist(localStorage.getItem("access_token"), id)
+        return res;
+    },
+
+    async showWishList({ commit }) {
+
+        const res = await ApiServices.addToWishlist(localStorage.getItem("access_token"))
+        return res;
+    },
+
 
 
 
 };
 
-const getters = {
-    getBookList: state => state.bookList,
-    getDummyData: state => state.dummyList,
 
-};
 
 export default {
     namespaced: true,

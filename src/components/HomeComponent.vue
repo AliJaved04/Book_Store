@@ -1,24 +1,22 @@
 <template>
-  <div class="container">
-    <v-app>
-      <HomeNavbar />
-      <v-main>
-        <HomeCarosel style="margin-bottom: 50px" />
-        <BooksCatalog />
-      </v-main>
-    </v-app>
-  </div>
+  <v-app>
+    <HomeNavbar />
+    <v-main>
+      <router-view></router-view>
+    </v-main>
+    <Footer />
+  </v-app>
 </template>
 
 <script>
-import BooksCatalog from "./BooksCatalog.vue";
-import HomeCarosel from "./HomeCarosel.vue";
+import LandingPage from "./LandingPage.vue";
+import Footer from "./Footer.vue";
 import HomeNavbar from "./HomeNavbar.vue";
 export default {
   components: {
-    HomeCarosel,
+    LandingPage,
     HomeNavbar,
-    BooksCatalog,
+    Footer,
   },
 };
 </script>

@@ -12,13 +12,13 @@
     </v-row>
 
     <div class="btnDiv">
-      <v-btn class="all_prod">All Products</v-btn>
+      <router-link to="/allproducts"><v-btn>All Products</v-btn></router-link>
     </div>
   </v-container>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import BookCard from "./BookCard.vue";
 export default {
   components: {
@@ -27,8 +27,12 @@ export default {
   computed: {
     ...mapGetters("book", ["getBookList"]),
   },
-  mounted() {
-    this.$store.dispatch("book/fetchPopularBooks");
+  methods: {
+    ...mapActions("book", ["fetchBooks"]),
+  },
+
+  beforeMount() {
+    this.fetchBooks();
   },
 };
 </script>

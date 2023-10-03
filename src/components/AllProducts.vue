@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12">
-        <h1 class="text-center">Popular Products</h1>
+        <h1 class="text-center">All Products</h1>
       </v-col>
     </v-row>
     <v-row style="margin-top: 100px">
@@ -10,15 +10,11 @@
         <BookCard :book="book" />
       </v-col>
     </v-row>
-
-    <div class="btnDiv">
-      <v-btn class="all_prod">All Products</v-btn>
-    </div>
   </v-container>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import BookCard from "./BookCard.vue";
 export default {
   components: {
@@ -27,8 +23,11 @@ export default {
   computed: {
     ...mapGetters("book", ["getBookList"]),
   },
-  mounted() {
-    this.$store.dispatch("book/fetchBooks");
+  methods: {
+    ...mapActions("book", ["fetchBooks"]),
+  },
+  beforeMount() {
+    this.fetchBooks();
   },
 };
 </script>
