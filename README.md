@@ -1,12 +1,20 @@
-# Book_Store
+# Book_Store 
+**PROJECT TIMELINE** 
+The deadline for the project development from my side is **Thursday/28-09-2023** with a buffer of one day.
+
+
+**PROJECT STATUS ON WEDNESDAY 27-09-2023**
+   I have completed my almost all the screens except the admin dashboard. The screens including the admin dashboard are remaining. Also I have implemented my studyed and implemented vuex in my existing components.
+
+
+
 
 **PROJECT STATUS ON TUESDAY 26-09-2023**
    I have completed my **login page**, **signup page**, **user dashboard** (It consists of **Edit User Detail Page**, **My Orders Page**, **Track Order through OrderID**,**Review and Rate a Product** ) , **book catalog**, **single book page**, **cart_page**. I have done completed basic functionalities of these pages but the UI needs refinement and the API is linkage is not currently.
 
 
 
-**PROJECT TIMELINE**
-   The deadline for the project development from my side is **Thursday/28-09-2023** with a buffer of one day.
+
 
 1) **LOGIN AND SIGNUP**
    There will be two login screens that I will make using Vuetify 3. And I will do the validation of fields using Vue Js rules list. There will be post requests for both **login and signup.** **(There will be total 2 screens)**
