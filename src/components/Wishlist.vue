@@ -170,7 +170,7 @@ export default {
       this.wishlist = items;
     },
 
-    ...mapActions("book", ["showWishList"]),
+    ...mapActions("wishlist_module", ["showWishList"]),
 
     deleteItem(item) {
       this.editedIndex = this.desserts.indexOf(item);

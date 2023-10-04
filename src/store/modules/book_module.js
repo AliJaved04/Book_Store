@@ -1,13 +1,14 @@
 import ApiServices from "@/services/Api";
 const state = {
     bookList: [],
-
+    wishList: [],
     dummyList: [],
 
 };
 
 const getters = {
     getBookList: state => state.bookList,
+    getWishList: state => state.wishlist,
     getDummyData: state => state.dummyList,
 
 
@@ -18,6 +19,9 @@ const mutations = {
     },
 
     setDummyData(state, dummyList) {
+        state.dummyList = dummyList
+    },
+    setWishlist(state, dummyList) {
         state.dummyList = dummyList
     }
 };
@@ -117,16 +121,25 @@ const actions = {
         commit('setBookList', popularBooks);
     },
 
-    async addToWishList({ commit }, id) {
 
-        const res = await ApiServices.addToWishlist(localStorage.getItem("access_token"), id)
+    async getSingleBook({ commit }, id) {
+        const res = await ApiServices.getSingleBook(id);
         return res;
     },
 
-    async showWishList({ commit }) {
-
-        const res = await ApiServices.addToWishlist(localStorage.getItem("access_token"))
+    async addBook({ commit }, bookData) {
+        const res = await ApiServices.addBook(localStorage.getItem("access_token"), bookData)
         return res;
+    },
+
+    async deleteABook({ commit }, id) {
+        const res = await ApiServices.deleteBook(localStorage.getItem("access_token"), id);
+        return res
+    },
+
+    async updateABook({ commit }, bookData) {
+        const res = await ApiServices.updateBook(localStorage.getItem("access_token"), bookData)
+        return res
     },
 
 

@@ -50,6 +50,17 @@
             <h4>Dont Have an Account?</h4>
             <router-link to="/register"><v-btn>Register</v-btn></router-link>
           </div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              margin-top: 30px;
+              gap: 30px;
+            "
+          >
+            <h4>Want to go to Homepage without login?</h4>
+            <router-link to="/"><v-btn>Home Page</v-btn></router-link>
+          </div>
         </v-form>
       </div>
     </div>
@@ -137,6 +148,8 @@ export default {
         });
         if (res.message === "Login successful") {
           localStorage.setItem("access_token", res.access_token);
+          localStorage.setItem("email", this.email);
+          localStorage.setItem("user_id", res.user_id);
           this.$router.push("/");
         }
       }

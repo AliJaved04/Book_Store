@@ -7,41 +7,74 @@
       <v-spacer></v-spacer>
 
       <div class="navContent">
-        <router-link to="/"><v-btn>Home</v-btn></router-link>
-        <router-link to="/allproducts"><v-btn>All Products</v-btn></router-link>
-
+        <router-link to="/userprofile"
+          ><v-btn v-if="isUser">My Profile</v-btn></router-link
+        >
         <router-link to="/CartPage">
-          <v-btn>
+          <v-btn v-if="isUser">
             <v-icon class="iconLarge">mdi-cart</v-icon>
           </v-btn>
         </router-link>
+        <router-link to="/myorders"
+          ><v-btn v-if="isUser">My Orders</v-btn></router-link
+        >
+        <router-link to="/wishlist"
+          ><v-btn v-if="isUser">My WishList</v-btn></router-link
+        >
+        <router-link to="/orders"
+          ><v-btn v-if="isAdmin">Show All Orders</v-btn></router-link
+        >
+        <router-link to="/addbook"
+          ><v-btn v-if="isAdmin">Add A Book</v-btn></router-link
+        >
 
-        <router-link to="/userprofile"><v-btn>User Profile</v-btn></router-link>
-        <router-link to="/myorders"><v-btn>My Orders</v-btn></router-link>
-        <v-btn @click="logoutHandler">Logout</v-btn>
+        <router-link to="/allUsers"
+          ><v-btn v-if="isAdmin">Show All Users</v-btn></router-link
+        >
+        <router-link to="/"><v-btn>Home</v-btn></router-link>
+        <router-link to="/allproducts"><v-btn>All Products</v-btn></router-link>
+        <router-link to="/login">
+          <v-btn v-if="!isAuth">Login</v-btn>
+        </router-link>
+        <router-link to="/">
+          <v-btn @click="logoutHandler" v-if="isAuth">Logout</v-btn>
+        </router-link>
       </div>
     </v-app-bar>
     <div v-if="showNavContent" class="menu">
       <div class="vertical-menu">
-        <router-link to="/">
-          <v-btn @click="toggleMenu">Home</v-btn></router-link
+        <router-link to="/userprofile"
+          ><v-btn v-if="isUser">My Profile</v-btn></router-link
         >
-        <router-link to="/allproducts">
-          <v-btn @click="toggleMenu">All Products</v-btn></router-link
-        >
-
         <router-link to="/CartPage">
-          <v-btn @click="toggleMenu">
+          <v-btn v-if="isUser">
             <v-icon class="iconLarge">mdi-cart</v-icon>
           </v-btn>
         </router-link>
-
-        <router-link to="/userProfile"
-          ><v-btn @click="toggleMenu">User Profile</v-btn></router-link
-        >
         <router-link to="/myorders"
-          ><v-btn @click="toggleMenu">My Orders</v-btn></router-link
+          ><v-btn v-if="isUser">My Orders</v-btn></router-link
         >
+        <router-link to="/wishlist"
+          ><v-btn v-if="isUser">My WishList</v-btn></router-link
+        >
+        <router-link to="/orders"
+          ><v-btn v-if="isAdmin">Show All Orders</v-btn></router-link
+        >
+        <router-link to="/addbook"
+          ><v-btn v-if="isAdmin">Add A Book</v-btn></router-link
+        >
+
+        <router-link to="/allUsers"
+          ><v-btn v-if="isAdmin">Show All Users</v-btn></router-link
+        >
+        <router-link to="/"><v-btn>Home</v-btn></router-link>
+        <router-link to="/allproducts"><v-btn>All Products</v-btn></router-link>
+        <router-link to="/login">
+          <v-btn v-if="!isAuth">Login</v-btn>
+        </router-link>
+        <router-link to="/">
+          <v-btn @click="logoutHandler" v-if="isAuth">Logout</v-btn>
+        </router-link>
       </div>
     </div>
   </div>
@@ -53,6 +86,9 @@ export default {
   data() {
     return {
       showNavContent: false,
+      isAuth: false,
+      isAdmin: false,
+      isUser: false,
     };
   },
 
@@ -65,9 +101,24 @@ export default {
       const res = await this.logout(localStorage.getItem("access_token"));
       if (res.data.message === "Logout Successfull") {
         localStorage.removeItem("access_token");
-        console.log("Logout Done");
+        localStorage.removeItem("email");
+        localStorage.removeItem("user_id");
+        this.isAuth = false;
+        this.isAdmin = false;
+        this.isUser = false;
       }
     },
+  },
+
+  beforeMount() {
+    if (localStorage.getItem("access_token")) {
+      this.isAuth = true;
+      if (localStorage.getItem("email") === "admin@gmail.com") {
+        this.isAdmin = true;
+      } else {
+        this.isUser = true;
+      }
+    }
   },
 };
 </script>

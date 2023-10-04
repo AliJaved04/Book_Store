@@ -12,7 +12,9 @@
     </v-row>
 
     <div class="btnDiv">
-      <router-link to="/allproducts"><v-btn>All Products</v-btn></router-link>
+      <router-link to="/allproducts"
+        ><v-btn class="all_prod">All Products</v-btn></router-link
+      >
     </div>
   </v-container>
 </template>
@@ -33,6 +35,7 @@ export default {
 
   beforeMount() {
     this.fetchBooks();
+    this.$toast.success("This is a success toast");
   },
 };
 </script>

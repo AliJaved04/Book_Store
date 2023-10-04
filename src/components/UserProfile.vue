@@ -26,6 +26,9 @@
           <v-text-field
             label="Password"
             autocomplete
+            :type="showPassword ? 'text' : 'password'"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="showPassword = !showPassword"
             v-model="userData.password"
           ></v-text-field>
         </v-card-text>
@@ -51,6 +54,7 @@ export default {
       },
       dialog: false,
       dialogDelete: false,
+      showPassword: false,
     };
   },
 
@@ -79,6 +83,7 @@ export default {
   async beforeMount() {
     const res = await this.userProfile(localStorage.getItem("access_token"));
     this.profile = res;
+    this.userData = res;
   },
 };
 </script>

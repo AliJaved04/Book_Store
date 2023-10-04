@@ -20,35 +20,87 @@
             <div class="bottom_data">
               <label class="title_product">Price: ${{ book.price }}</label>
 
-              <div>
-                <v-rating
-                  :readonly="true"
-                  v-model="book.rating"
-                  :half-increments="true"
-                  color="amber"
-                ></v-rating>
-              </div>
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn size="small" color="surface-variant" variant="text"
-                  >Add to Cart</v-btn
-                >
-
                 <v-btn
+                  v-if="isAdmin"
                   size="small"
                   color="surface-variant"
                   variant="text"
-                  @click="wishlist(book.id)"
-                  >Wishlist</v-btn
+                  @click="updateBook(book)"
+                  >Update Book</v-btn
                 >
                 <v-btn
+                  v-if="isAdmin"
+                  size="small"
+                  color="surface-variant"
+                  variant="text"
+                  @click="deleteBook(book.id)"
+                  >Delete Book</v-btn
+                >
+                <v-btn
+                  v-if="isUser"
+                  size="small"
+                  color="surface-variant"
+                  variant="text"
+                  @click="detailPage(book.id)"
+                  >Buy Now</v-btn
+                >
+                <v-btn
+                  v-if="isUser"
+                  size="small"
+                  color="surface-variant"
+                  variant="text"
+                  ><v-icon style="font-size: 28px">mdi-cart</v-icon></v-btn
+                >
+                <v-btn v-if="isUser" @click="wishlist(book.id)">
+                  <v-icon style="font-size: 28px">mdi-heart</v-icon>
+                </v-btn>
+
+                <v-btn
+                  v-if="isUser"
                   size="small"
                   color="surface-variant"
                   variant="text"
                   @click="detailPage(book.id)"
                   >Details</v-btn
                 >
+
+                <v-dialog v-model="dialog" max-width="500px">
+                  <v-card>
+                    <v-card-title>Edit Product</v-card-title>
+                    <v-card-text>
+                      <v-form>
+                        <v-text-field
+                          v-model="product.title"
+                          label="Title"
+                        ></v-text-field>
+                        <v-textarea
+                          v-model="product.description"
+                          label="Description"
+                        ></v-textarea>
+                        <v-text-field
+                          v-model="product.cover_image_url"
+                          label="Image URL"
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="product.price"
+                          label="Price"
+                          type="number"
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="product.author"
+                          label="Author"
+                        ></v-text-field>
+                      </v-form>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn @click="saveChanges">Save</v-btn>
+                      <v-btn @click="closeDialog">Cancel</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </v-card-actions>
             </div>
           </v-card>
@@ -60,26 +112,65 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  data: () => ({
-    rating: 4,
-  }),
-
+  data() {
+    return {
+      product: {},
+      isAuth: false,
+      isAdmin: false,
+      isUser: false,
+      dialog: false,
+    };
+  },
   props: {
     book: Object,
   },
+  beforeMount() {
+    if (localStorage.getItem("access_token")) {
+      this.isAuth = true;
+      if (localStorage.getItem("email") === "admin@gmail.com") {
+        this.isAdmin = true;
+      } else {
+        this.isUser = true;
+      }
+    }
+  },
   methods: {
     ...mapActions("book", ["addToWishList"]),
+    ...mapActions("book", ["deleteABook"]),
+    ...mapActions("book", ["updateABook"]),
     detailPage(id) {
       this.$router.push({
         name: "SingleProduct",
         params: { product_id: id },
       });
     },
-    async wishlist(id) {
-      const res = await this.addToWishList(id);
-      if (res.message === "Item added to wishlist") {
-        console.log("Item Added");
+    async deleteBook(id) {
+      const res = await this.deleteABook(id);
+      console.log(res);
+      if (res.message === "Book deleted") {
+        console.log("Book Deleted");
       }
+    },
+    async updateBook(book) {
+      this.product = book;
+      this.dialog = true;
+    },
+    async wishlist(id) {
+      this.addToWishList(id);
+      // if (res.message === "Item added to wishlist") {
+      //   console.log("Item Added");
+      // }
+    },
+
+    closeDialog() {
+      this.dialog = false;
+    },
+    async saveChanges() {
+      const res = await this.updateABook(this.product);
+      if (res.message === "Book updated") {
+        console.log("Book Updated");
+      }
+      this.dialog = false; // Close the dialog after saving changes
     },
   },
 };

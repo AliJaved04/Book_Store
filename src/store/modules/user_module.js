@@ -1,5 +1,6 @@
 import ApiServices from "@/services/Api";
 const state = {
+
 };
 
 const getters = {
@@ -46,7 +47,16 @@ const actions = {
     async subscribe({ commit }, token) {
         const res = await ApiServices.newletterSubscription(token);
         return res;
-    }
+    },
+    async showAllUsers({ commit }) {
+        const res = await ApiServices.showAllUsers(localStorage.getItem("access_token"))
+        return res;
+    },
+    async deleteUser({ commit }, id) {
+        const res = await ApiServices.deleteUser(localStorage.getItem("access_token"), id)
+        return res;
+    },
+
 
 
 }

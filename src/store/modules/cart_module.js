@@ -1,3 +1,5 @@
+import ApiServices from "@/services/Api";
+
 const state = {
     cartItems: []
 }
@@ -37,7 +39,56 @@ const actions = {
         ]
         commit('setCartItems', items);
 
-    }
+    },
+
+    async addToCart({ commit }, cartItem) {
+        const response = await ApiServices.addToCart(localStorage.getItem("access_token"), cartItem);
+        return response;
+    },
+
+    async getCartItems({ commit }) {
+        const response = await ApiServices.showCartItems(localStorage.getItem("access_token"))
+        return response
+    },
+
+    async updateCart({ commit }, cartItem) {
+
+        const response = await ApiServices.updateCart(localStorage.getItem("access_token"), cartItem);
+        return response
+
+    },
+    async deleteCartItem({ commit }, id) {
+
+        const response = await ApiServices.deleteCartItem(localStorage.getItem("access_token"), id);
+        return response
+    },
+    async placeOrder({ commit }) {
+        const response = await ApiServices.placeOrder(localStorage.getItem("access_token"))
+        return response
+
+    },
+
+    async showOrdersUser({ commit }) {
+        const response = await ApiServices.showOrdersUser(localStorage.getItem("access_token"), localStorage.getItem("user_id"));
+        return response;
+    },
+    async showAllOrders({ commit }) {
+        const response = await ApiServices.showAllOrders(localStorage.getItem("access_token"));
+        return response;
+    },
+
+    async updateOrderStatus({ commit }, orderData) {
+        const res = await ApiServices.updateOrderStatus(localStorage.getItem("access_token"), orderData);
+        return res;
+    },
+    async deleteOrder({ commit }, id) {
+        const res = await ApiServices.updateOrderStatus(localStorage.getItem("access_token"), id);
+        return res;
+    },
+
+
+
+
 }
 
 export default {

@@ -175,7 +175,7 @@ export default {
 
   methods: {
     toLogin() {
-      this.$router.push("/");
+      this.$router.push("/login");
     },
 
     ...mapActions("user_module", ["registerUser"]),

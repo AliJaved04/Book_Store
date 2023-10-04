@@ -15,6 +15,14 @@
 
         <h2 style="color: #3e976c">Price: ${{ product.price * quantity }}</h2>
 
+        <div>
+          <v-rating
+            :readonly="true"
+            v-model="product.rating"
+            :half-increments="true"
+            color="amber"
+          ></v-rating>
+        </div>
         <input
           class="quan"
           v-model="quantity"
@@ -23,7 +31,7 @@
           style="max-width: 140px; margin-right: 10px"
           min="1"
         />
-        <v-btn color="#3e976c">Add to Cart</v-btn>
+        <v-btn color="#3e976c" @click="cartHandler">Add to Cart</v-btn>
       </div>
     </div>
 
@@ -69,7 +77,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
@@ -80,15 +88,27 @@ export default {
       list: [],
       product: {},
       quantity: 1,
+      cartItem: {},
     };
   },
-  mounted() {
+
+  methods: {
+    ...mapActions("book", ["getSingleBook"]),
+    ...mapActions("cart", ["addToCart"]),
+    async cartHandler() {
+      this.cartItem.user_id = localStorage.getItem("user_id");
+      this.cartItem.quantity = this.quantity;
+      this.cartItem.book_id = this.product.id;
+      this.cartItem.price = this.product.price;
+      const res = await this.addToCart(this.cartItem);
+      if (res.message === "Item added to cart") {
+        console.log("Added to cart");
+      }
+    },
+  },
+  async mounted() {
     this.$store.dispatch("book/fetchBooks");
-    this.list = this.getBookList.filter(
-      (book) => book.id == this.$route.params.product_id
-    );
-    this.product = this.list[0];
-    this.price = this.product.price;
+    this.product = await this.getSingleBook(this.$route.params.product_id);
   },
 };
 </script>

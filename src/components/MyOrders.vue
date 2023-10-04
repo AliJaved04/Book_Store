@@ -1,68 +1,36 @@
 <template>
   <div>
-    <v-container>
-      <v-row justify="center">
-        <v-col cols="12">
-          <h1 class="text-center">My Orders</h1>
-        </v-col>
-      </v-row>
-      <v-row style="margin-top: 20px">
-        <v-col
-          class="card"
-          v-for="order in orderList"
-          :key="order.OrderId"
-          cols="12"
-          sm="6"
-          md="4"
-        >
-          <h4>Order ID:{{ order.OrderId }}</h4>
-          <h4>UserID: {{ order.UserId }}</h4>
-          <h4>Order Status: {{ order.status }}</h4>
-          <VBtn
-            v-if="order.status === 'Completed'"
-            @click="reviewHandler(order.OrderId, order.ProductName)"
-            >Review</VBtn
-          >
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-data-table :headers="headers" :items="orderList" class="elevation-1">
+    </v-data-table>
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      orderList: [
+      orderList: [],
+      headers: [
         {
-          OrderId: 1,
-          UserId: 1,
-          status: "Completed",
+          title: "Order Id",
+
+          key: "id",
         },
-        {
-          OrderId: 2,
-          UserId: 1,
-          status: "Processing",
-        },
-        {
-          OrderId: 3,
-          UserId: 1,
-          status: "Packed",
-        },
-        {
-          OrderId: 4,
-          UserId: 1,
-          status: "Packed",
-        },
+        { title: "UserID", key: "user_id" },
+        { title: "Order Status", key: "status" },
       ],
+      dialog: false,
+      dialogDelete: false,
+      editedItem: {},
     };
   },
   methods: {
-    reviewHandler(id, name) {
-      this.$router.push({
-        name: "ReviewComponent",
-        params: { order_id: id, productName: name },
-      });
-    },
+    ...mapActions("cart", ["showOrdersUser"]),
+  },
+  async beforeMount() {
+    const res = await this.showOrdersUser();
+    console.log(res);
+    this.orderList = res;
   },
 };
 </script>

@@ -1,8 +1,9 @@
+import ApiServices from "@/services/Api";
 const state = {
     wishList: []
 }
 const getters = {
-    getWishLisr: state => state.wishList,
+    getWishList: state => state.wishList,
 
 }
 const mutations = {
@@ -38,7 +39,19 @@ const actions = {
 
         commit('setWishList', wishlist);
 
-    }
+    },
+    async addToWishList({ commit }, id) {
+
+        const res = await ApiServices.addToWishlist(localStorage.getItem("access_token"), id)
+        console.log(res)
+    },
+
+    async showWishList({ commit }) {
+
+        const res = await ApiServices.getWishList(localStorage.getItem("access_token"))
+        commit("setWishlist", res)
+    },
+
 }
 
 export default {

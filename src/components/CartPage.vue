@@ -1,7 +1,7 @@
 <template>
   <h1 style="text-align: center; margin: 30px">Cart Page</h1>
   <v-data-table :headers="headers" :items="desserts" class="elevation-1">
-    <template v-slot:item.src="{ item }">
+    <!-- <template v-slot:item.src="{ item }">
       <v-img
         v-if="item.src"
         :src="item.src"
@@ -9,7 +9,7 @@
         max-height="150px"
         style="padding: 10px"
       ></v-img>
-    </template>
+    </template> -->
     <template v-slot:top>
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
@@ -21,33 +21,25 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6" md="4">
-                  <v-img
-                    v-if="editedItem.src"
-                    readonly
-                    :src="editedItem.src"
-                    max-width="100%"
-                    max-height="150px"
-                  ></v-img>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     readonly
-                    v-model="editedItem.title"
+                    v-model="editedItem.book_id"
                     label="Product Title"
                   ></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
-                    v-model="editedItem.quantity"
-                    label="Quantity"
                     type="number"
-                  ></v-text-field>
+                    label="quantity"
+                    v-model="editedItem.quantity"
+                  >
+                  </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     readonly
-                    v-model="totalPrice"
+                    v-model="editedItem.price"
                     label="Price"
                   ></v-text-field>
                 </v-col>
@@ -93,43 +85,40 @@
       </v-icon>
       <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
-    </template>
   </v-data-table>
+  <div class="btnDiv">
+    <v-btn color="#3e976c" @click="checkout">Checkout</v-btn>
+  </div>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
   data: () => ({
     singlePrice: 0,
     dialog: false,
     dialogDelete: false,
     headers: [
-      { title: "Image", key: "src", align: "start", sortable: false },
       {
-        title: "Product Name",
+        title: "Product Id",
 
-        key: "title",
+        key: "book_id",
       },
       { title: "Quantity", key: "quantity" },
       { title: "Price", key: "price" },
       { title: "Actions", key: "actions", sortable: false },
     ],
+    delete_id: 0,
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      title: "",
-      src: "",
-      description: "",
+      book_id: "",
       price: 0,
-      quan: 0,
+      quantity: 0,
     },
     defaultItem: {
-      title: "",
-      quan: 0,
-      src: "",
+      book_id: "",
+      quantity: 0,
       price: 0,
-      description: "",
     },
   }),
 
@@ -152,110 +141,16 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
+  async beforeMount() {
+    const res = await this.getCartItems();
+    this.desserts = res.cart;
   },
 
   methods: {
-    initialize() {
-      const books = [
-        {
-          id: 1,
-          author: "Author01",
-          title: "Book Title 01",
-          quantity: 5,
-          price: 2000,
-          src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-          description:
-            "This is all the description we need about this single product",
-          rating: 4.5,
-        },
-        {
-          id: 2,
-          quantity: 5,
-          author: "Author02",
-          title: "Book Title 02",
-          description:
-            "This is all the description we need about this single product",
-          src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-          rating: 1,
-          price: 2000,
-        },
-
-        {
-          id: 3,
-          quantity: 5,
-          author: "Author03",
-          title: "Book Title 03",
-          description:
-            "This is all the description we need about this single product",
-          src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-          rating: 2,
-          price: 2000,
-        },
-        {
-          id: 4,
-          quantity: 5,
-          description:
-            "This is all the description we need about this single product",
-          author: "Author04",
-          src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-          title: "Book Title 04",
-          rating: 3,
-          price: 2000,
-        },
-        {
-          id: 5,
-          quantity: 5,
-          description:
-            "This is all the description we need about this single product",
-          author: "Author05",
-          src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-          title: "Book Title 05",
-          rating: 4.0,
-          price: 2000,
-        },
-        {
-          id: 6,
-          quantity: 5,
-          description:
-            "This is all the description we need about this single product",
-          author: "Author06",
-          src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-
-          title: "Book Title 06",
-          price: 2000,
-
-          rating: 4.1,
-        },
-        {
-          id: 7,
-          quantity: 5,
-          description:
-            "This is all the description we need about this single product",
-          author: "Author07",
-          src: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-          price: 2000,
-
-          title: "Book Title 07",
-          rating: 4.0,
-        },
-
-        {
-          id: 8,
-          quantity: 5,
-          price: 2000,
-
-          description:
-            "This is all the description we need about this single product",
-          author: "Author08",
-          title: "Book Title 08",
-          src: "https://picsum.photos/500/300?image=232",
-          rating: 3.5,
-        },
-      ];
-      this.desserts = books;
-    },
+    ...mapActions("cart", ["getCartItems"]),
+    ...mapActions("cart", ["updateCart"]),
+    ...mapActions("cart", ["deleteCartItem"]),
+    ...mapActions("cart", ["placeOrder"]),
 
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
@@ -264,14 +159,23 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
+    async checkout() {
+      const res = await this.placeOrder();
+      console.log(res);
+    },
+    async deleteItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      this.delete_id = item.id;
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
+    async deleteItemConfirm() {
       this.desserts.splice(this.editedIndex, 1);
+      const res = await this.deleteCartItem(this.delete_id);
+      if (res.message === "Cart item removed") {
+        console.log("Item Removed");
+      }
       this.closeDelete();
     },
 
@@ -291,14 +195,28 @@ export default {
       });
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
       } else {
         this.desserts.push(this.editedItem);
+      }
+
+      const res = await this.updateCart(this.editedItem);
+      if (res.message === "Cart item updated") {
+        console.log("Item Updated");
       }
       this.close();
     },
   },
 };
 </script>
+<style scoped>
+.btnDiv {
+  display: flex;
+  min-width: 30vw;
+  min-height: 30vh;
+  align-items: center;
+  justify-content: center;
+}
+</style>

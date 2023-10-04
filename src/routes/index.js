@@ -11,6 +11,8 @@ import Orders from '../components/Orders.vue'
 import dummy from '../components/dummy.vue'
 import UserProfile from '../components/UserProfile.vue'
 import Wishlist from '../components/Wishlist.vue'
+import AddBook from '../components/AddBook.vue'
+import AllUsers from '../components/AllUsers.vue'
 const routes = [
 
 
@@ -34,9 +36,19 @@ const routes = [
         children:
             [
                 {
+                    path: "addbook",
+                    name: "AddBook",
+                    component: AddBook,
+                },
+                {
                     path: "allproducts",
                     name: "AllProducts",
                     component: AllProducts,
+                },
+                {
+                    path: "allusers",
+                    name: "AllUsers",
+                    component: AllUsers,
                 },
                 {
                     path: "wishlist",
