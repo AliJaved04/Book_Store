@@ -35,7 +35,7 @@ export default {
 
   beforeMount() {
     this.fetchBooks();
-    this.$toast.success("This is a success toast");
+    // this.$toast.success("This is a success toast");
   },
 };
 </script>

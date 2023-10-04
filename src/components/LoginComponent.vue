@@ -62,6 +62,22 @@
             <router-link to="/"><v-btn>Home Page</v-btn></router-link>
           </div>
         </v-form>
+        <v-snackbar v-model="snackbar">
+          Please Fill all the fields
+          <template v-slot:actions>
+            <v-btn color="red" variant="text" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+        <v-snackbar v-model="wrongCreds">
+          Your Credientials are wrong, please try again
+          <template v-slot:actions>
+            <v-btn color="red" variant="text" @click="wrongCreds = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
       </div>
     </div>
   </div>
@@ -115,6 +131,8 @@ export default {
     email: "",
     showPassword: false,
     iconColor: "black",
+    snackbar: false,
+    wrongCreds: false,
     passwordRules: [
       (value) => {
         if (value?.length >= 8) return true;
@@ -140,17 +158,24 @@ export default {
     },
     async submitHandlerFetch() {
       if (!this.email || !this.password) {
+        this.snackbar = true;
         console.log("Fill all the fields");
       } else {
-        const res = await this.loginUser({
-          email: this.email,
-          password: this.password,
-        });
-        if (res.message === "Login successful") {
-          localStorage.setItem("access_token", res.access_token);
-          localStorage.setItem("email", this.email);
-          localStorage.setItem("user_id", res.user_id);
-          this.$router.push("/");
+        try {
+          const res = await this.loginUser({
+            email: this.email,
+            password: this.password,
+          });
+
+          if (res.message === "Login successful") {
+            localStorage.setItem("access_token", res.access_token);
+            localStorage.setItem("email", this.email);
+            localStorage.setItem("user_id", res.user_id);
+
+            this.$router.push("/");
+          }
+        } catch (error) {
+          this.wrongCreds = true;
         }
       }
     },

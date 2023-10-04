@@ -1,14 +1,12 @@
 import ApiServices from "@/services/Api";
 const state = {
     bookList: [],
-    wishList: [],
     dummyList: [],
 
 };
 
 const getters = {
     getBookList: state => state.bookList,
-    getWishList: state => state.wishlist,
     getDummyData: state => state.dummyList,
 
 
@@ -21,9 +19,7 @@ const mutations = {
     setDummyData(state, dummyList) {
         state.dummyList = dummyList
     },
-    setWishlist(state, dummyList) {
-        state.dummyList = dummyList
-    }
+
 };
 
 const actions = {

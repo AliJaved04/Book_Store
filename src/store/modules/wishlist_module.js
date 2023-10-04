@@ -42,15 +42,20 @@ const actions = {
     },
     async addToWishList({ commit }, id) {
 
-        const res = await ApiServices.addToWishlist(localStorage.getItem("access_token"), id)
-        console.log(res)
+        const res = await ApiServices.addToWishList(localStorage.getItem("access_token"), id)
+        return res;
     },
 
     async showWishList({ commit }) {
 
         const res = await ApiServices.getWishList(localStorage.getItem("access_token"))
-        commit("setWishlist", res)
+        return res;
     },
+
+    async removeWishList({ commit }, id) {
+        const res = await ApiServices.removeWishListItem(localStorage.getItem("access_token"), id);
+        return res
+    }
 
 }
 

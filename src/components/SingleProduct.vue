@@ -109,6 +109,7 @@ export default {
   async mounted() {
     this.$store.dispatch("book/fetchBooks");
     this.product = await this.getSingleBook(this.$route.params.product_id);
+    console.log(this.product);
   },
 };
 </script>

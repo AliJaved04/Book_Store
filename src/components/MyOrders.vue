@@ -1,11 +1,17 @@
 <template>
   <div>
     <v-data-table :headers="headers" :items="orderList" class="elevation-1">
+      <template v-slot:item.actions="{ item }">
+        <v-btn v-if="item.status === 'completed'" @click="reviewHandler(item)">
+          Review</v-btn
+        >
+      </template>
     </v-data-table>
   </div>
 </template>
 <script>
 import { mapActions } from "vuex";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -18,6 +24,7 @@ export default {
         },
         { title: "UserID", key: "user_id" },
         { title: "Order Status", key: "status" },
+        { title: "Actions", key: "actions", sortable: false },
       ],
       dialog: false,
       dialogDelete: false,
@@ -26,10 +33,27 @@ export default {
   },
   methods: {
     ...mapActions("cart", ["showOrdersUser"]),
+    ...mapActions("cart", ["getOrderItems"]),
+
+    reviewHandler(item) {
+      this.getOrderItems(item.id);
+    },
+
+    async getOrderItems(id) {
+      const response = await axios.get(
+        `http://10.0.10.211:3300/api/orderitems/show/${4}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log(response.data);
+    },
   },
   async beforeMount() {
     const res = await this.showOrdersUser();
-    console.log(res);
     this.orderList = res;
   },
 };

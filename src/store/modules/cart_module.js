@@ -81,10 +81,13 @@ const actions = {
         const res = await ApiServices.updateOrderStatus(localStorage.getItem("access_token"), orderData);
         return res;
     },
-    async deleteOrder({ commit }, id) {
-        const res = await ApiServices.updateOrderStatus(localStorage.getItem("access_token"), id);
+
+
+
+    async OrderItems({ commit }, orderId) {
+        const res = await ApiServices.getItems(localStorage.getItem("access_token"), orderId);
         return res;
-    },
+    }
 
 
 

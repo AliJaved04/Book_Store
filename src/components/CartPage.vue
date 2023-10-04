@@ -1,15 +1,6 @@
 <template>
   <h1 style="text-align: center; margin: 30px">Cart Page</h1>
   <v-data-table :headers="headers" :items="desserts" class="elevation-1">
-    <!-- <template v-slot:item.src="{ item }">
-      <v-img
-        v-if="item.src"
-        :src="item.src"
-        max-width="100%"
-        max-height="150px"
-        style="padding: 10px"
-      ></v-img>
-    </template> -->
     <template v-slot:top>
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>

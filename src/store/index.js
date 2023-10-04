@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 import book from "./modules/book_module";
 import cart from "./modules/cart_module";
 import user_module from "./modules/user_module";
-import wishlist_module from "./modules/wishlist_module";
+import wishlist from "./modules/wishlist_module";
 export default createStore(
     {
         state:
@@ -22,7 +22,7 @@ export default createStore(
             book,
             cart,
             user_module,
-            wishlist_module
+            wishlist
         }
 
     })

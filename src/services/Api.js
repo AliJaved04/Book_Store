@@ -108,7 +108,8 @@ const ApiServices =
         return response
     },
 
-    async addToWishlist(token, id) {
+
+    async addToWishList(token, id) {
         const response = await axios.post(
             `${BASE_URL}/wishlist/add/${id}`, {},
             {
@@ -131,18 +132,19 @@ const ApiServices =
         })
         return response.data;
     },
-    async showWishList(token) {
-        const response = await axios.post(
-            `${BASE_URL}/wishlist/show`, {},
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        return response.data;
+
+    async removeWishListItem(token, id) {
+
+        const response = await axios.delete(`${BASE_URL}/wishlist/remove/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        )
+        return response.data
     },
+
 
 
     async addToCart(token, cartItem) {
@@ -312,16 +314,7 @@ const ApiServices =
         )
         return response.data
     },
-    async deleteOrder(token, id) {
-        const response = await axios.delete(`${BASE_URL}/delete/orders/${id}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        }
-        )
-        return response.data
-    }
+
 
 
 

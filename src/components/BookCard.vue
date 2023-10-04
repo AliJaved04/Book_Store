@@ -39,27 +39,20 @@
                   @click="deleteBook(book.id)"
                   >Delete Book</v-btn
                 >
+
                 <v-btn
-                  v-if="isUser"
-                  size="small"
-                  color="surface-variant"
-                  variant="text"
-                  @click="detailPage(book.id)"
-                  >Buy Now</v-btn
-                >
-                <v-btn
-                  v-if="isUser"
+                  v-if="!isAdmin"
                   size="small"
                   color="surface-variant"
                   variant="text"
                   ><v-icon style="font-size: 28px">mdi-cart</v-icon></v-btn
                 >
-                <v-btn v-if="isUser" @click="wishlist(book.id)">
+                <v-btn v-if="!isAdmin" @click="wishlist(book.id)">
                   <v-icon style="font-size: 28px">mdi-heart</v-icon>
                 </v-btn>
 
                 <v-btn
-                  v-if="isUser"
+                  v-if="!isAdmin"
                   size="small"
                   color="surface-variant"
                   variant="text"
@@ -135,7 +128,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("book", ["addToWishList"]),
+    ...mapActions("wishlist", ["addToWishList"]),
     ...mapActions("book", ["deleteABook"]),
     ...mapActions("book", ["updateABook"]),
     detailPage(id) {
@@ -156,10 +149,10 @@ export default {
       this.dialog = true;
     },
     async wishlist(id) {
-      this.addToWishList(id);
-      // if (res.message === "Item added to wishlist") {
-      //   console.log("Item Added");
-      // }
+      const res = await this.addToWishList(id);
+      if (res.message === "Item added to wishlist") {
+        console.log("Item Added");
+      }
     },
 
     closeDialog() {
