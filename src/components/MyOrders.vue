@@ -8,6 +8,14 @@
       </template>
     </v-data-table>
   </div>
+  <v-snackbar v-model="errorBar">
+    User Does not have any orders
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="errorBar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 <script>
 import { mapActions } from "vuex";
@@ -28,33 +36,32 @@ export default {
       ],
       dialog: false,
       dialogDelete: false,
+      order_items: {},
       editedItem: {},
+      errorBar: false,
     };
   },
   methods: {
     ...mapActions("cart", ["showOrdersUser"]),
-    ...mapActions("cart", ["getOrderItems"]),
 
     reviewHandler(item) {
       this.getOrderItems(item.id);
     },
 
     async getOrderItems(id) {
-      const response = await axios.get(
-        `http://10.0.10.211:3300/api/orderitems/show/${4}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      console.log(response.data);
+      this.$router.push({
+        name: "ReviewComponent",
+        params: { order_id: id },
+      });
     },
   },
   async beforeMount() {
-    const res = await this.showOrdersUser();
-    this.orderList = res;
+    try {
+      const res = await this.showOrdersUser();
+      this.orderList = res;
+    } catch (error) {
+      this.errorBar = true;
+    }
   },
 };
 </script>

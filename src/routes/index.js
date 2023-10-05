@@ -12,6 +12,7 @@ import dummy from '../components/dummy.vue'
 import UserProfile from '../components/UserProfile.vue'
 import Wishlist from '../components/Wishlist.vue'
 import AddBook from '../components/AddBook.vue'
+import ReviewComponent from '../components/ReviewComponent.vue'
 import AllUsers from '../components/AllUsers.vue'
 const routes = [
 
@@ -74,6 +75,13 @@ const routes = [
                     path: "/singleproduct/:product_id",
                     name: "SingleProduct",
                     component: SingleProduct,
+                    props: true
+
+                },
+                {
+                    path: "/review/:order_id",
+                    name: "ReviewComponent",
+                    component: ReviewComponent,
                     props: true
 
                 },

@@ -5,7 +5,7 @@
         <img src="img.png" alt="" />
       </div>
       <div class="form">
-        <v-form class="signup-form" fast-fail @submit.prevent>
+        <v-form class="signup-form" ref="myForm" fast-fail @submit.prevent>
           <v-text-field
             outlined
             dense
@@ -78,6 +78,30 @@
         </v-form>
       </div>
     </div>
+    <v-snackbar v-model="snackbar">
+      Please Fill all the fields
+      <template v-slot:actions>
+        <v-btn color="red" variant="text" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-snackbar v-model="success">
+      Successfully Registered.
+      <template v-slot:actions>
+        <v-btn color="red" variant="text" @click="success = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-snackbar v-model="wrongCreds">
+      User already exists or entered data is not processable.
+      <template v-slot:actions>
+        <v-btn color="red" variant="text" @click="wrongCreds = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -139,6 +163,9 @@ export default {
         email: "",
       },
       showPassword: false,
+      snackbar: false,
+      success: false,
+      wrongCreds: false,
       showConfirmPassword: false,
 
       usernameRules: [
@@ -180,15 +207,25 @@ export default {
 
     ...mapActions("user_module", ["registerUser"]),
 
-    submitHandler() {
+    async submitHandler() {
       if (
         !this.signUpData.email ||
         !this.signUpData.password ||
         !this.signUpData.username
       ) {
-        console.log("Cannot Send");
+        this.snackbar = true;
       } else {
-        this.registerUser(this.signUpData);
+        try {
+          const res = await this.registerUser(this.signUpData);
+          if (res.message === "User registered successfully") {
+            this.$refs.myForm.reset();
+            this.success = true;
+          } else {
+            console.log(res);
+          }
+        } catch (error) {
+          this.wrongCreds = true;
+        }
       }
     },
   },

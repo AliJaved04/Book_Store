@@ -8,7 +8,7 @@
               :src="book.cover_image_url"
               class="align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              height="200px"
+              height="400px"
               cover
             >
               <v-card-title
@@ -39,17 +39,6 @@
                   @click="deleteBook(book.id)"
                   >Delete Book</v-btn
                 >
-
-                <v-btn
-                  v-if="!isAdmin"
-                  size="small"
-                  color="surface-variant"
-                  variant="text"
-                  ><v-icon style="font-size: 28px">mdi-cart</v-icon></v-btn
-                >
-                <v-btn v-if="!isAdmin" @click="wishlist(book.id)">
-                  <v-icon style="font-size: 28px">mdi-heart</v-icon>
-                </v-btn>
 
                 <v-btn
                   v-if="!isAdmin"
@@ -163,7 +152,7 @@ export default {
       if (res.message === "Book updated") {
         console.log("Book Updated");
       }
-      this.dialog = false; // Close the dialog after saving changes
+      this.dialog = false;
     },
   },
 };

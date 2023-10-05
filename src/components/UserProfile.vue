@@ -14,7 +14,6 @@
         label="Email"
       ></v-text-field>
       <v-btn @click="editUserData" class="mt-2">Edit</v-btn>
-      <v-btn @click="deleteHandler" class="mt-2 ml-4">Delete</v-btn>
     </v-form>
 
     <v-dialog v-model="dialog" max-width="600">
@@ -39,6 +38,22 @@
       </v-card>
     </v-dialog>
   </v-sheet>
+  <v-snackbar v-model="snackbar">
+    Profile Updated Successfully
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="snackbar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
+  <v-snackbar v-model="errorBar">
+    Cannot update profile you might be doing something wrong
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="errorBar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script>
@@ -52,8 +67,9 @@ export default {
         password: "",
         email: "",
       },
+      snackbar: false,
+      errorBar: false,
       dialog: false,
-      dialogDelete: false,
       showPassword: false,
     };
   },
@@ -65,14 +81,17 @@ export default {
     editUserData() {
       this.dialog = true;
     },
-    deleteHandler() {
-      this.dialogDelete = true;
-    },
+
     async saveUserData() {
-      const res = await this.updateUserProfile(this.userData);
-      if (res.message === "User updated successfully") {
-        console.log("Updated");
+      try {
+        const res = await this.updateUserProfile(this.userData);
+        if (res.message === "User updated successfully") {
+          this.snackbar = true;
+        }
+      } catch (error) {
+        this.errorBar = true;
       }
+
       this.dialog = false;
     },
     closeDialog() {

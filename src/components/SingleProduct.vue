@@ -32,48 +32,20 @@
           min="1"
         />
         <v-btn color="#3e976c" @click="cartHandler">Add to Cart</v-btn>
+        <v-btn color="#3e976c" style="margin-left: 10px" @click="gotoCart"
+          >Go to Cart</v-btn
+        >
       </div>
     </div>
-
-    <!-- <v-card>
-      <v-card-title style="color: #125a18">Customer Reviews</v-card-title>
-      <v-divider></v-divider>
-      <v-list>
-        <v-list-item v-for="(review, index) in book.reviews" :key="index">
-          <v-list-item-title>{{ review.title }}</v-list-item-title>
-          <v-list-item-subtitle style="color: #125a18"
-            >Rating: {{ review.rating }}/5</v-list-item-subtitle
-          >
-          <v-list-item-content>{{ review.comment }}</v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-card>
-    <v-card>
-      <v-card-title style="color: #ff6e40">Related Books</v-card-title>
-      <v-divider></v-divider>
-      <v-row>
-        <v-col
-          v-for="relatedBook in book.relatedBooks"
-          :key="relatedBook.id"
-          cols="12"
-          sm="6"
-          md="4"
-          lg="3"
-        >
-          <v-card>
-            <v-img :src="relatedBook.coverImage" height="200"></v-img>
-            <v-card-title style="color: #ff6e40">{{
-              relatedBook.title
-            }}</v-card-title>
-            <v-card-subtitle>{{ relatedBook.author }}</v-card-subtitle>
-            <v-card-actions>
-              <v-btn color="#ff6e40">View Details</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-card> -->
   </v-container>
+  <v-snackbar v-model="snackbar">
+    Item Added to Cart
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="snackbar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script>
@@ -89,6 +61,7 @@ export default {
       product: {},
       quantity: 1,
       cartItem: {},
+      snackbar: false,
     };
   },
 
@@ -102,8 +75,12 @@ export default {
       this.cartItem.price = this.product.price;
       const res = await this.addToCart(this.cartItem);
       if (res.message === "Item added to cart") {
-        console.log("Added to cart");
+        this.snackbar = true;
       }
+    },
+
+    gotoCart() {
+      this.$router.push("/cartPage");
     },
   },
   async mounted() {

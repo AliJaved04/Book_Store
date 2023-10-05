@@ -1,5 +1,5 @@
 <template>
-  <h1 style="text-align: center; margin: 30px">Cart Page</h1>
+  <h1 style="text-align: center; margin: 30px">Wishlist</h1>
   <v-data-table :headers="headers" :items="desserts" class="elevation-1">
     <template v-slot:top>
       <v-dialog v-model="dialog" max-width="500px">
@@ -14,8 +14,16 @@
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field
                     readonly
+                    v-model="editedItem.id"
+                    label="Wishlist Item Id"
+                  ></v-text-field>
+                </v-col>
+
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field
+                    readonly
                     v-model="editedItem.book_id"
-                    label="Product Title"
+                    label="Book Id"
                   ></v-text-field>
                 </v-col>
 
@@ -64,9 +72,6 @@
       </v-dialog>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon size="small" class="me-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
       <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
   </v-data-table>
@@ -80,7 +85,12 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        title: "Product Id",
+        title: "Item Id",
+
+        key: "id",
+      },
+      {
+        title: "Book Id",
 
         key: "book_id",
       },

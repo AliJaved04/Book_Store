@@ -80,6 +80,30 @@
   <div class="btnDiv">
     <v-btn color="#3e976c" @click="checkout">Checkout</v-btn>
   </div>
+  <v-snackbar v-model="snackbar">
+    Order Placed Successfully
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="snackbar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
+  <v-snackbar v-model="updateOrder">
+    Order Updated Successfully
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="updateOrder = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
+  <v-snackbar v-model="deleteOrder">
+    Order Deleted Successfully
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="deleteOrder = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 <script>
 import { mapActions } from "vuex";
@@ -100,12 +124,15 @@ export default {
     ],
     delete_id: 0,
     desserts: [],
+    updateOrder: false,
+    deleteOrder: false,
     editedIndex: -1,
     editedItem: {
       book_id: "",
       price: 0,
       quantity: 0,
     },
+    snackbar: false,
     defaultItem: {
       book_id: "",
       quantity: 0,
@@ -151,8 +178,13 @@ export default {
     },
 
     async checkout() {
-      const res = await this.placeOrder();
-      console.log(res);
+      try {
+        const res = await this.placeOrder();
+        if (res) {
+          this.snackbar = true;
+          this.desserts = [];
+        }
+      } catch (error) {}
     },
     async deleteItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
@@ -165,7 +197,7 @@ export default {
       this.desserts.splice(this.editedIndex, 1);
       const res = await this.deleteCartItem(this.delete_id);
       if (res.message === "Cart item removed") {
-        console.log("Item Removed");
+        this.deleteOrder = true;
       }
       this.closeDelete();
     },
@@ -195,7 +227,7 @@ export default {
 
       const res = await this.updateCart(this.editedItem);
       if (res.message === "Cart item updated") {
-        console.log("Item Updated");
+        this.updateOrder = true;
       }
       this.close();
     },

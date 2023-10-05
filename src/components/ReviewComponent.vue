@@ -1,60 +1,37 @@
 <template>
   <div>
-    <div class="card">
-      <h4>{{ productName }}</h4>
-      <h4>{{ orderID }}</h4>
-    </div>
-
-    <v-card>
-      <v-card-title>
-        Customer Review
-        <v-rating
-          v-model="rating"
-          :half-increments="true"
-          color="amber"
-        ></v-rating>
-      </v-card-title>
-
-      <v-card-text>
-        <v-text-field
-          v-model="reviewText"
-          label="Review"
-          multi-line
-          rows="5"
-          counter
-        ></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="primary" @click="submitReview">Submit</v-btn>
-        <v-btn color="error" @click="cancelReview">Cancel</v-btn>
-      </v-card-actions>
-    </v-card>
+    <v-row style="margin: 20px">
+      <v-col v-for="item in orderList" key="item.id" cols="12" sm="6" md="4">
+        <OrderItems :item="item" />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
+import OrderItems from "./OrderItems.vue";
+import axios from "axios";
 export default {
+  components: {
+    OrderItems,
+  },
   data() {
     return {
-      orderID: "",
-      productName: "",
-      rating: 0,
-      reviewText: "",
+      orderList: [],
     };
   },
-  beforeMount() {
-    this.orderID = this.$route.params.order_id;
-    this.productName = this.$route.params.productName;
-  },
 
-  methods: {
-    submitReview() {
-      console.log(this.reviewText, this.rating);
-    },
-    cancelReview() {
-      this.rating = 0;
-      this.reviewText = "";
-    },
+  async beforeMount() {
+    const response = await axios.get(
+      `http://10.0.10.211:3300/api/orderItems/${this.$route.params.order_id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+    this.orderList = response.data;
   },
 };
 </script>

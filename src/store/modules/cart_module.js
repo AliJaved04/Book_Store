@@ -2,6 +2,7 @@ import ApiServices from "@/services/Api";
 
 const state = {
     cartItems: []
+
 }
 const getters = {
     getCartItems: state => state.cartItems,

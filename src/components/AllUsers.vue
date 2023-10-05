@@ -95,6 +95,8 @@ export default {
     },
 
     async deleteItemConfirm() {
+      this.users.splice(this.editedIndex, 1);
+
       const res = await this.deleteUser(this.user_id);
       if (res.message === "Profile deleted") {
         console.log("User profile deleted");
